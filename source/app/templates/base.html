@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Address Book{% endblock %} · SCS323</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Address Book home"><span aria-hidden="true">AB</span><strong>Address Book</strong></a>
+      <nav aria-label="Main navigation"><a href="/">Contacts</a><a class="button button-small" href="/contacts/new">Add Contact</a></nav>
+    </div>
+  </header>
+  <main id="main" class="page-shell">
+    {% if message %}<div class="flash" role="status">{{ message }}</div>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer><p>Teaching application · Version {{ version }} · Synthetic data only</p></footer>
+</body>
+</html>
