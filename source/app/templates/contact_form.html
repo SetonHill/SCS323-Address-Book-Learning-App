@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ mode }} Contact{% endblock %}
+{% block content %}
+<p class="breadcrumbs"><a href="/">Contacts</a> <span aria-hidden="true">/</span> {{ mode }}</p>
+<section class="form-card"><div class="page-heading compact"><div><p class="eyebrow">Contact record</p><h1>{{ mode }} Contact</h1><p>Required fields are marked. Validation runs before SQL is written.</p></div></div>
+<form method="post" novalidate>
+  <div class="field-row">
+    <div class="field"><label for="first_name">First name <span aria-hidden="true">*</span></label><input id="first_name" name="first_name" value="{{ contact.first_name or '' }}" required maxlength="80" autocomplete="given-name" {% if errors.first_name %}aria-invalid="true" aria-describedby="first_name-error"{% endif %}>{% if errors.first_name %}<p class="field-error" id="first_name-error">{{ errors.first_name }}</p>{% endif %}</div>
+    <div class="field"><label for="last_name">Last name <span aria-hidden="true">*</span></label><input id="last_name" name="last_name" value="{{ contact.last_name or '' }}" required maxlength="80" autocomplete="family-name" {% if errors.last_name %}aria-invalid="true" aria-describedby="last_name-error"{% endif %}>{% if errors.last_name %}<p class="field-error" id="last_name-error">{{ errors.last_name }}</p>{% endif %}</div>
+  </div>
+  <div class="field"><label for="email">Email <span aria-hidden="true">*</span></label><input id="email" name="email" type="email" value="{{ contact.email or '' }}" required maxlength="254" autocomplete="email" {% if errors.email %}aria-invalid="true" aria-describedby="email-error"{% endif %}>{% if errors.email %}<p class="field-error" id="email-error">{{ errors.email }}</p>{% endif %}</div>
+  <div class="form-actions"><button type="submit">{{ mode }} Contact</button><a class="button button-secondary" href="{% if contact.id %}/contacts/{{ contact.id }}{% else %}/{% endif %}">Cancel</a></div>
+</form></section>
+{% endblock %}

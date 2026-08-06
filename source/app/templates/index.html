@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Contacts{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">Your contacts</p><h1>Address Book</h1><p>Find a synthetic contact or add one to trace the complete browser-to-database workflow.</p></div><a class="button" href="/contacts/new">Add Contact</a></section>
+<form class="search" method="get" action="/" role="search"><label for="q">Search contacts</label><div><input id="q" name="q" value="{{ q }}" placeholder="Name or email"><button type="submit">Search</button>{% if q %}<a class="quiet-link" href="/">Clear</a>{% endif %}</div></form>
+{% if contacts %}
+<p class="result-count">{{ contacts|length }} contact{% if contacts|length != 1 %}s{% endif %}{% if q %} matching “{{ q }}”{% endif %}</p>
+<ul class="contact-grid">
+{% for contact in contacts %}<li><article class="contact-card"><div class="avatar" aria-hidden="true">{{ contact.first_name[0] }}{{ contact.last_name[0] }}</div><div><h2><a href="/contacts/{{ contact.id }}">{{ contact.first_name }} {{ contact.last_name }}</a></h2><p><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></p><p class="metadata">Added {{ contact.created_at.strftime('%b %d, %Y') }}</p></div><a class="card-action" href="/contacts/{{ contact.id }}">View details<span class="sr-only"> for {{ contact.first_name }} {{ contact.last_name }}</span></a></article></li>{% endfor %}
+</ul>
+{% else %}<section class="empty-state"><h2>{% if q %}No matching contacts{% else %}No contacts yet{% endif %}</h2><p>{% if q %}Try a shorter name or email search.{% else %}Create the first synthetic contact to begin the walkthrough.{% endif %}</p>{% if q %}<a class="button button-secondary" href="/">Show All Contacts</a>{% else %}<a class="button" href="/contacts/new">Create First Contact</a>{% endif %}</section>{% endif %}
+{% endblock %}
