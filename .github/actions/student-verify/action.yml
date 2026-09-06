@@ -1,0 +1,34 @@
+name: SCS323 Address Book Student Verification
+description: Build, migrate, test, and inspect an SCS323 Address Book change without requiring the source tree to remain frozen.
+
+runs:
+  using: composite
+  steps:
+    - name: Validate repository safety and required structure
+      shell: bash
+      run: ruby "$GITHUB_ACTION_PATH/verify-student-work.rb"
+
+    - name: Build, migrate, test, and check health
+      shell: bash
+      env:
+        COMPOSE_PROJECT_NAME: scs323verify${{ github.run_id }}${{ github.run_attempt }}
+      run: |
+        set -euo pipefail
+        cd "$GITHUB_WORKSPACE/source"
+
+        cleanup() {
+          docker compose down --volumes --remove-orphans >/dev/null 2>&1 || true
+          rm -f .env
+        }
+        trap cleanup EXIT
+
+        cp .env.example .env
+        docker compose config --quiet
+        docker compose build
+        docker compose up -d --wait database
+        docker compose run --rm app alembic upgrade head
+        docker compose up -d --wait app
+        docker compose exec -T app python -m app.seed
+        docker compose exec -T app pytest -q
+        curl --fail --silent --show-error http://127.0.0.1:8000/health
+
