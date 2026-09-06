@@ -12,12 +12,13 @@ jobs:
   verify:
     name: verify
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
-      - run: ruby scripts/verify-release.rb
+      - uses: SetonHill/SCS323-Address-Book-Learning-App/.github/actions/student-verify@20bccbd13b71d05ba30ec1e9fd1497de7e07afc0
 
   gitleaks:
     name: gitleaks
